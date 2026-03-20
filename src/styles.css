@@ -1,0 +1,160 @@
+:root {
+  color-scheme: light;
+  --bg0: #0b1020;
+  --bg1: #121a33;
+  --card: rgba(255, 255, 255, 0.08);
+  --card2: rgba(255, 255, 255, 0.12);
+  --stroke: rgba(255, 255, 255, 0.14);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.72);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background: radial-gradient(1200px 600px at 20% 10%, #2a3bff40, transparent),
+    radial-gradient(900px 500px at 90% 20%, #ffcc0030, transparent),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+  color: var(--text);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.card {
+  background: linear-gradient(180deg, var(--card), rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+button {
+  font: inherit;
+}
+
+.btn {
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  transition: transform 160ms ease, background 160ms ease,
+    border-color 160ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.26);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.btnPrimary {
+  border-color: rgba(255, 255, 255, 0.26);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.08));
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.kbd {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 18px;
+}
+
+@media (max-width: 860px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--text);
+  padding: 10px 12px;
+  outline: none;
+}
+
+input:focus {
+  border-color: rgba(120, 160, 255, 0.7);
+  box-shadow: 0 0 0 4px rgba(120, 160, 255, 0.15);
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 6px;
+}
+
+.formField {
+  margin-bottom: 12px;
+}
+
+.toast {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 12px;
+}
+
