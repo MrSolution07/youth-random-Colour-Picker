@@ -199,16 +199,35 @@ export default function AdminDashboard() {
 
   if (!isAdmin) {
     return (
-      <div className="container">
-        <div className="card" style={{ padding: 18, maxWidth: 640, margin: "0 auto" }}>
-          <div style={{ fontWeight: 1000, fontSize: 20 }}>Access denied</div>
-          <div className="muted" style={{ marginTop: 6, fontSize: 13, lineHeight: 1.5 }}>
-            You need an admin account (custom claim `admin=true`) to view this page.
-          </div>
-          <div style={{ marginTop: 14 }}>
-            <a className="btn btnPrimary" href="/admin/login">
-              Go to login
+      <div className="tribeWarsPage">
+        <div className="phone-frame">
+          <div className="topBar">
+            <img className="churchLogo" src="/acts-logo.png" alt="Church logo" />
+            <a
+              className="loginIcon"
+              href="/admin/login"
+              aria-label="Admin login"
+              title="Admin login"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21a8 8 0 0 0-16 0" />
+                <circle cx="12" cy="8" r="4" />
+              </svg>
             </a>
+          </div>
+
+          <div className="phoneBody">
+            <div className="card" style={{ padding: 18, width: "100%" }}>
+              <div style={{ fontWeight: 1000, fontSize: 20 }}>Access denied</div>
+              <div className="muted" style={{ marginTop: 6, fontSize: 13, lineHeight: 1.5 }}>
+                You need an admin account (custom claim `admin=true`) to view this page.
+              </div>
+              <div style={{ marginTop: 14 }}>
+                <a className="btn btnPrimary" href="/admin/login">
+                  Go to login
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -216,114 +235,129 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="container">
-      <div className="card" style={{ padding: 18 }}>
-        <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div>
-            <div style={{ fontWeight: 1000, fontSize: 22 }}>Admin dashboard</div>
-            <div className="muted" style={{ marginTop: 6, fontSize: 13 }}>
-              Quota check + device count + Excel export.
-            </div>
-            <div className="muted" style={{ marginTop: 6, fontSize: 13 }}>
-              Current round: <span className="kbd">{roundIndex ?? "—"}</span>
-            </div>
-          </div>
-          <div style={{ textAlign: "right" }}>
-            <div className="pill">
-              <span className="kbd">Devices</span>
-              <span style={{ fontWeight: 900 }}>{devicesCount}</span>
-            </div>
-          </div>
-        </div>
-
-        {error ? (
-          <div className="toast" style={{ marginTop: 14, borderColor: "rgba(255,92,92,0.35)" }}>
-            {error}
-          </div>
-        ) : null}
-
-        <div style={{ marginTop: 16 }}>
-          <div style={{ fontWeight: 900, fontSize: 16 }}>Quota-balanced repartition</div>
-          <div className="muted" style={{ marginTop: 6, fontSize: 13 }}>
-            For each tribe: quota is 5 per round (20 total). This shows reserved/pending + confirmed.
-          </div>
-        </div>
-
-        <div style={{ marginTop: 14, overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr style={{ textAlign: "left" }}>
-                <th style={{ padding: "10px 8px", color: "rgba(255,255,255,0.8)", fontSize: 13 }}>Tribe</th>
-                <th style={{ padding: "10px 8px", color: "rgba(255,255,255,0.8)", fontSize: 13 }}>Color</th>
-                <th style={{ padding: "10px 8px", color: "rgba(255,255,255,0.8)", fontSize: 13 }}>Reserved</th>
-                <th style={{ padding: "10px 8px", color: "rgba(255,255,255,0.8)", fontSize: 13 }}>Confirmed</th>
-                <th style={{ padding: "10px 8px", color: "rgba(255,255,255,0.8)", fontSize: 13 }}>Pending</th>
-              </tr>
-            </thead>
-            <tbody>
-              {TRIBES.map((t) => (
-                <tr key={t.id}>
-                  <td style={{ padding: "10px 8px", fontWeight: 900 }}>
-                    <span className="pill" style={{ borderColor: "rgba(255,255,255,0.12)" }}>
-                      <span
-                        style={{
-                          width: 10,
-                          height: 10,
-                          borderRadius: 999,
-                          background: t.hex,
-                          boxShadow: `0 0 0 4px ${t.hex}22`,
-                        }}
-                      />
-                      {t.label}
-                    </span>
-                  </td>
-                  <td style={{ padding: "10px 8px", color: "rgba(255,255,255,0.86)" }}>
-                    {t.colorLabel}
-                  </td>
-                  <td style={{ padding: "10px 8px" }}>
-                    <span className="kbd">{roundCounts[t.id] ?? 0}</span>
-                  </td>
-                  <td style={{ padding: "10px 8px" }}>
-                    <span className="kbd">{confirmedCounts[t.id] ?? 0}</span>
-                  </td>
-                  <td style={{ padding: "10px 8px" }}>
-                    <span className="kbd">{pendingCounts[t.id] ?? 0}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="muted" style={{ marginTop: 10, fontSize: 13 }}>
-            Total reserved this round: <span className="kbd">{roundTotalAssigned}</span> / 20
-          </div>
-        </div>
-
-        <div style={{ marginTop: 16 }} className="row">
-          <button className="btn btnPrimary" onClick={loadStats} disabled={loading}>
-            {loading ? "Refreshing..." : "Refresh"}
-          </button>
-          <button
-            className="btn"
-            onClick={() => exportExcel("current")}
-            disabled={!currentRoundId || loading}
+    <div className="tribeWarsPage">
+      <div className="phone-frame">
+        <div className="topBar">
+          <img className="churchLogo" src="/acts-logo.png" alt="Church logo" />
+          <a
+            className="loginIcon"
+            href="/admin/login"
+            aria-label="Admin login"
+            title="Admin login"
           >
-            Export current round to Excel
-          </button>
-          <button className="btn" onClick={() => exportExcel("all")} disabled={loading}>
-            Export all confirmed to Excel
-          </button>
-          {lastExportAt ? (
-            <div className="muted" style={{ fontSize: 13 }}>
-              Last export: {new Date(lastExportAt).toLocaleTimeString()}
-            </div>
-          ) : null}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21a8 8 0 0 0-16 0" />
+              <circle cx="12" cy="8" r="4" />
+            </svg>
+          </a>
         </div>
 
-        {loading ? (
-          <div style={{ marginTop: 12 }} className="muted">
-            Updating...
+        <div className="phoneBody">
+          <div className="card" style={{ padding: 18, width: "100%" }}>
+            <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div>
+                <div style={{ fontWeight: 1000, fontSize: 22 }}>Admin dashboard</div>
+                <div className="muted" style={{ marginTop: 6, fontSize: 13 }}>
+                  Quota check + device count + Excel export.
+                </div>
+                <div className="muted" style={{ marginTop: 6, fontSize: 13 }}>
+                  Current round: <span className="kbd">{roundIndex ?? "—"}</span>
+                </div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div className="pill">
+                  <span className="kbd">Devices</span>
+                  <span style={{ fontWeight: 900 }}>{devicesCount}</span>
+                </div>
+              </div>
+            </div>
+
+            {error ? (
+              <div className="toast" style={{ marginTop: 14, borderColor: "rgba(255,92,92,0.35)" }}>
+                {error}
+              </div>
+            ) : null}
+
+            <div style={{ marginTop: 16 }}>
+              <div style={{ fontWeight: 900, fontSize: 16 }}>Quota-balanced repartition</div>
+              <div className="muted" style={{ marginTop: 6, fontSize: 13 }}>
+                For each tribe: quota is 5 per round (20 total). This shows reserved/pending + confirmed.
+              </div>
+            </div>
+
+            <div style={{ marginTop: 14, overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr style={{ textAlign: "left" }}>
+                    <th style={{ padding: "10px 8px", color: "rgba(255,255,255,0.8)", fontSize: 13 }}>Tribe</th>
+                    <th style={{ padding: "10px 8px", color: "rgba(255,255,255,0.8)", fontSize: 13 }}>Color</th>
+                    <th style={{ padding: "10px 8px", color: "rgba(255,255,255,0.8)", fontSize: 13 }}>Reserved</th>
+                    <th style={{ padding: "10px 8px", color: "rgba(255,255,255,0.8)", fontSize: 13 }}>Confirmed</th>
+                    <th style={{ padding: "10px 8px", color: "rgba(255,255,255,0.8)", fontSize: 13 }}>Pending</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {TRIBES.map((t) => (
+                    <tr key={t.id}>
+                      <td style={{ padding: "10px 8px", fontWeight: 900 }}>
+                        <span className="pill" style={{ borderColor: "rgba(255,255,255,0.12)" }}>
+                          <span
+                            style={{
+                              width: 10,
+                              height: 10,
+                              borderRadius: 999,
+                              background: t.hex,
+                              boxShadow: `0 0 0 4px ${t.hex}22`,
+                            }}
+                          />
+                          {t.label}
+                        </span>
+                      </td>
+                      <td style={{ padding: "10px 8px", color: "rgba(255,255,255,0.86)" }}>
+                        {t.colorLabel}
+                      </td>
+                      <td style={{ padding: "10px 8px" }}>
+                        <span className="kbd">{roundCounts[t.id] ?? 0}</span>
+                      </td>
+                      <td style={{ padding: "10px 8px" }}>
+                        <span className="kbd">{confirmedCounts[t.id] ?? 0}</span>
+                      </td>
+                      <td style={{ padding: "10px 8px" }}>
+                        <span className="kbd">{pendingCounts[t.id] ?? 0}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="muted" style={{ marginTop: 10, fontSize: 13 }}>
+                Total reserved this round: <span className="kbd">{roundTotalAssigned}</span> / 20
+              </div>
+            </div>
+
+            <div style={{ marginTop: 16 }} className="row">
+              <button className="btn btnPrimary" onClick={loadStats} disabled={loading}>
+                {loading ? "Refreshing..." : "Refresh"}
+              </button>
+              <button className="btn" onClick={() => exportExcel("current")} disabled={!currentRoundId || loading}>
+                Export current round to Excel
+              </button>
+              <button className="btn" onClick={() => exportExcel("all")} disabled={loading}>
+                Export all confirmed to Excel
+              </button>
+              {lastExportAt ? (
+                <div className="muted" style={{ fontSize: 13 }}>
+                  Last export: {new Date(lastExportAt).toLocaleTimeString()}
+                </div>
+              ) : null}
+            </div>
+
+            {loading ? (
+              <div style={{ marginTop: 12 }} className="muted">
+                Updating...
+              </div>
+            ) : null}
           </div>
-        ) : null}
+        </div>
       </div>
     </div>
   );

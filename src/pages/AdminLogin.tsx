@@ -39,46 +39,64 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="container">
-      <div className="card" style={{ padding: 18, maxWidth: 520, margin: "0 auto" }}>
-        <div style={{ fontWeight: 1000, fontSize: 22 }}>Admin login</div>
-        <div className="muted" style={{ marginTop: 6, fontSize: 13, lineHeight: 1.5 }}>
-          Sign in with an admin account (requires a Firebase Auth custom claim: <span className="kbd">admin=true</span>).
+    <div className="tribeWarsPage">
+      <div className="phone-frame">
+        <div className="topBar">
+          <img className="churchLogo" src="/acts-logo.png" alt="Church logo" />
+          <a
+            className="loginIcon"
+            href="/"
+            aria-label="Back to wheel"
+            title="Back to wheel"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </a>
         </div>
 
-        <form onSubmit={handleLogin} style={{ marginTop: 16 }}>
-          <div className="formField">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@example.com"
-              disabled={loading}
-              autoComplete="email"
-            />
-          </div>
-          <div className="formField">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              disabled={loading}
-              autoComplete="current-password"
-            />
-          </div>
-          {error ? (
-            <div className="toast" style={{ marginBottom: 12, borderColor: "rgba(255,92,92,0.35)" }}>
-              {error}
+        <div className="phoneBody">
+          <div className="card" style={{ padding: 18, width: "100%" }}>
+            <div style={{ fontWeight: 1000, fontSize: 22 }}>Admin login</div>
+            <div className="muted" style={{ marginTop: 6, fontSize: 13, lineHeight: 1.5 }}>
+              Sign in with an admin account (requires a Firebase Auth custom claim: <span className="kbd">admin=true</span>).
             </div>
-          ) : null}
-          <button className="btn btnPrimary" type="submit" disabled={loading}>
-            {loading ? "Signing in..." : "Sign in"}
-          </button>
-        </form>
+
+            <form onSubmit={handleLogin} style={{ marginTop: 16 }}>
+              <div className="formField">
+                <label htmlFor="email">Email</label>
+                <input
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@example.com"
+                  disabled={loading}
+                  autoComplete="email"
+                />
+              </div>
+              <div className="formField">
+                <label htmlFor="password">Password</label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  disabled={loading}
+                  autoComplete="current-password"
+                />
+              </div>
+              {error ? (
+                <div className="toast" style={{ marginBottom: 12, borderColor: "rgba(255,92,92,0.35)" }}>
+                  {error}
+                </div>
+              ) : null}
+              <button className="btn btnPrimary" type="submit" disabled={loading}>
+                {loading ? "Signing in..." : "Sign in"}
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );

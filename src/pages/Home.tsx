@@ -143,22 +143,43 @@ export default function Home() {
 
       <div className="tribeWarsPage">
         <div className="phone-frame">
-          <div className="title-section">
-            <h1>TRIBE WARS</h1>
-            <p>Spin to choose your Youth Tribe</p>
+          <div className="topBar">
+            <img
+              className="churchLogo"
+              src="/acts-logo.png"
+              alt="Church logo"
+            />
+            <a
+              className="loginIcon"
+              href="/admin/login"
+              aria-label="Admin login"
+              title="Admin login"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21a8 8 0 0 0-16 0" />
+                <circle cx="12" cy="8" r="4" />
+              </svg>
+            </a>
           </div>
 
-          <Wheel
-            rotationDeg={rotationDeg}
-            highlight={highlight}
-            spinning={phase === "spinning"}
-            result={phase === "form" || phase === "done"}
-            onSpin={handleSpin}
-            disabled={busy || phase === "form" || phase === "done"}
-            buttonLabel={spinLabel}
-          />
+          <div className="phoneBody">
+            <div className="title-section">
+              <h1>TRIBE WARS</h1>
+              <p>Spin to choose your Youth Tribe</p>
+            </div>
 
-          {error && <div className="wheelError">{error}</div>}
+            <Wheel
+              rotationDeg={rotationDeg}
+              highlight={highlight}
+              spinning={phase === "spinning"}
+              result={phase === "form" || phase === "done"}
+              onSpin={handleSpin}
+              disabled={busy || phase === "form" || phase === "done"}
+              buttonLabel={spinLabel}
+            />
+
+            {error && <div className="wheelError">{error}</div>}
+          </div>
         </div>
       </div>
 
