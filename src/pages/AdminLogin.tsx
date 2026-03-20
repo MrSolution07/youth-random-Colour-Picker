@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import LoadingOverlay from "../components/LoadingOverlay";
-import { appReady, auth } from "../lib/firebase";
+import { appReady } from "../lib/firebase";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ export default function AdminLogin() {
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    if (!appReady || !auth) return;
+    if (!appReady) return;
 
     setLoading(true);
     setError(null);

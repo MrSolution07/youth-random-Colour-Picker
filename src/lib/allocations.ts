@@ -3,6 +3,7 @@ import { db, serverTimestamp } from "./firebase";
 import {
   collection,
   doc,
+  updateDoc,
   runTransaction,
   serverTimestamp as fsServerTimestamp,
 } from "firebase/firestore";
@@ -33,7 +34,6 @@ function randomInt(maxExclusive: number) {
 }
 
 export async function spinAndReserve(params: {
-  userUid: string;
   deviceId: string;
 }): Promise<AllocationResult> {
   const firestore = db;
@@ -141,7 +141,6 @@ export async function spinAndReserve(params: {
 
     const responseRef = doc(collection(firestore, "responses"));
     tx.set(responseRef, {
-      userUid: params.userUid,
       deviceId: params.deviceId,
       roundId,
       roundIndex: round.rData.index,
@@ -164,27 +163,19 @@ export async function spinAndReserve(params: {
 
 export async function confirmResponse(params: {
   responseId: string;
-  userUid: string;
+  deviceId: string;
   name: string;
   whatsapp: string;
 }) {
   if (!db) throw new Error("Firebase not configured");
 
   const responseRef = doc(db, "responses", params.responseId);
-  await runTransaction(db, async (tx) => {
-    const snap = await tx.get(responseRef);
-    if (!snap.exists()) throw new Error("Response not found.");
-
-    const data = snap.data() as { userUid?: string; status?: string };
-    if (data.userUid !== params.userUid) throw new Error("Not allowed.");
-    if (data.status === "confirmed") return;
-
-    tx.update(responseRef, {
-      status: "confirmed",
-      name: params.name,
-      whatsapp: params.whatsapp,
-      confirmedAt: fsServerTimestamp(),
-    });
+  await updateDoc(responseRef, {
+    deviceId: params.deviceId,
+    status: "confirmed",
+    name: params.name,
+    whatsapp: params.whatsapp,
+    confirmedAt: fsServerTimestamp(),
   });
 }
 

@@ -38,6 +38,49 @@ export const TRIBES: Array<{
   },
 ];
 
+export type WheelSegment = {
+  tribeIndex: number;
+  tribe: (typeof TRIBES)[number];
+  kind: "color" | "tribe";
+  displayLabel: string;
+  hex: string;
+  hexDark: string;
+};
+
+const DARK_HEX: Record<TribeId, string> = {
+  scarlet: "#b8221a",
+  skyline: "#065bb5",
+  sunfire: "#b89a00",
+  earth_bound: "#1f8a3a",
+};
+
+export function buildWheelSegments(): WheelSegment[] {
+  const segments: WheelSegment[] = [];
+  for (let i = 0; i < TRIBES.length; i++) {
+    const t = TRIBES[i];
+    segments.push({
+      tribeIndex: i,
+      tribe: t,
+      kind: "color",
+      displayLabel: t.colorLabel,
+      hex: t.hex,
+      hexDark: DARK_HEX[t.id],
+    });
+    segments.push({
+      tribeIndex: i,
+      tribe: t,
+      kind: "tribe",
+      displayLabel: t.label,
+      hex: DARK_HEX[t.id],
+      hexDark: t.hex,
+    });
+  }
+  return segments;
+}
+
+export const WHEEL_SEGMENTS = buildWheelSegments();
+export const SEGMENT_ANGLE = 360 / WHEEL_SEGMENTS.length;
+
 export const TRIBE_SECTOR_ANGLE = 360 / TRIBES.length;
 export const QUOTA_PER_TRIBE = 5;
 export const ROUND_SIZE = QUOTA_PER_TRIBE * TRIBES.length;
@@ -45,4 +88,3 @@ export const ROUND_SIZE = QUOTA_PER_TRIBE * TRIBES.length;
 export function getTribeById(id: TribeId) {
   return TRIBES.find((t) => t.id === id)!;
 }
-

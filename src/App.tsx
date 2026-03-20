@@ -2,13 +2,11 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
-import { useAuthBootstrap } from "./lib/auth";
+import { appReady } from "./lib/firebase";
 import FirebaseNotConfigured from "./pages/FirebaseNotConfigured";
 
 export default function App() {
-  const { ready } = useAuthBootstrap();
-
-  if (!ready) return <FirebaseNotConfigured />;
+  if (!appReady) return <FirebaseNotConfigured />;
 
   return (
     <Routes>

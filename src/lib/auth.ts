@@ -2,7 +2,6 @@ import {
   User,
   getAuth,
   onAuthStateChanged,
-  signInAnonymously,
   type IdTokenResult,
 } from "firebase/auth";
 import { useEffect, useMemo, useState } from "react";
@@ -39,14 +38,6 @@ export function useAuthBootstrap(): AuthState {
           return;
         }
 
-        // If the participant hasn't been authenticated yet, we sign them in anonymously.
-        if (u.isAnonymous === false && u.uid) {
-          const tokenRes = await u.getIdTokenResult();
-          setIsAdmin(getAdminClaim(tokenRes));
-          return;
-        }
-
-        // Anonymous participant still might be admin if claims were set.
         const tokenRes = await u.getIdTokenResult();
         setIsAdmin(getAdminClaim(tokenRes));
       } finally {
@@ -55,14 +46,6 @@ export function useAuthBootstrap(): AuthState {
     });
 
     return () => unsub();
-  }, [ready]);
-
-  useEffect(() => {
-    if (!ready) return;
-    const auth = getAuth();
-    signInAnonymously(auth).catch(async () => {
-      // Ignore if already signed in.
-    });
   }, [ready]);
 
   return { ready, user, isAdmin, authLoading };

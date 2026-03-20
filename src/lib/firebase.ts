@@ -1,5 +1,4 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import {
   getFirestore,
   type Firestore,
@@ -46,7 +45,6 @@ const firebaseConfig = appReady
   : ({} as never);
 
 export const app = appReady ? initializeApp(firebaseConfig) : null;
-export const auth = app ? getAuth(app) : null;
 export const db: Firestore | null = app ? getFirestore(app) : null;
 
 export { serverTimestamp };

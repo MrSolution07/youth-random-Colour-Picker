@@ -3,7 +3,6 @@ import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export async function touchDevice(params: {
   deviceId: string;
-  userUid: string;
 }) {
   if (!db) throw new Error("Firebase not configured");
 
@@ -11,7 +10,7 @@ export async function touchDevice(params: {
   await setDoc(
     deviceRef,
     {
-      userUid: params.userUid,
+      deviceId: params.deviceId,
       firstSeenAt: serverTimestamp(),
       lastSeenAt: serverTimestamp(),
     },
