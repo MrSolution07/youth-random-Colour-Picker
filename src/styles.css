@@ -236,7 +236,9 @@ a { color: inherit; text-decoration: none; }
   border-radius: 50%;
   border: 0;
   background: #ffffff;
-  color: #4f46e5;
+  animation: colorCycle 4s infinite;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
   font-size: 28px;
   font-weight: 900;
   letter-spacing: 2.2px;
@@ -496,6 +498,14 @@ a { color: inherit; text-decoration: none; }
   color: #4c1d95;
 }
 
+@keyframes colorCycle {
+  0%   { background-color: #ef4444; }
+  25%  { background-color: #3b82f6; }
+  50%  { background-color: #22c55e; }
+  75%  { background-color: #eab308; }
+  100% { background-color: #ef4444; }
+}
+
 /* Center button (SPIN) */
 .center-btn {
   position: absolute;
@@ -505,6 +515,7 @@ a { color: inherit; text-decoration: none; }
   width: 108px;
   height: 108px;
   background: white;
+  animation: colorCycle 4s infinite;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -529,7 +540,8 @@ a { color: inherit; text-decoration: none; }
   font-family: "Nunito", sans-serif;
   font-weight: 900;
   font-size: 22px;
-  color: #6c5ce7;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
   letter-spacing: 2px;
 }
 
@@ -756,4 +768,3 @@ label {
   border-radius: 12px;
   font-size: 13px;
 }
-
