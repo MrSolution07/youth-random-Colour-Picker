@@ -58,7 +58,7 @@ export default function Wheel({
           const bg = isTribe
             ? "linear-gradient(145deg,#ffffff,#e8e8f0)"
             : `linear-gradient(145deg, ${seg.hexDark}, ${seg.hex})`;
-          const textColor = isTribe ? "#4c1d95" : "rgba(255,255,255,0.95)";
+          const textColor = isTribe ? seg.tribe.hex : "rgba(255,255,255,0.95)";
           const fontSize = rewardFontSize(seg.displayLabel);
 
           return (
