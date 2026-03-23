@@ -6,6 +6,7 @@ type Props = {
   highlight?: TribeId | null;
   spinning?: boolean;
   result?: boolean;
+  idle?: boolean;
   onSpin?: () => void;
   disabled?: boolean;
   buttonLabel?: string;
@@ -23,9 +24,10 @@ export default function Wheel({
   highlight,
   spinning,
   result,
+  idle,
   onSpin,
   disabled,
-  buttonLabel = "SPIN",
+  buttonLabel = "TAP TO SPIN",
 }: Props) {
   const segments = useMemo(() => {
     return WHEEL_SEGMENTS.map((seg, i) => {
@@ -48,8 +50,8 @@ export default function Wheel({
       </div>
 
       <div
-        className="wheel-wrap"
-        style={{
+        className={["wheel-wrap", idle ? "wheel-idle" : ""].join(" ")}
+        style={idle ? undefined : {
           transform: `rotate(${rotationDeg}deg)`,
         }}
       >
