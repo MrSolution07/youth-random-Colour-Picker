@@ -14,12 +14,12 @@ import {
 import { touchDevice } from "../lib/devices";
 import ConfettiBurst from "../components/ConfettiBurst";
 
-type Phase = "idle" | "spinning" | "form" | "done";
+type Phase = "intro" | "idle" | "spinning" | "form" | "done";
 
 export default function Home() {
   const ready = appReady;
 
-  const [phase, setPhase] = useState<Phase>("idle");
+  const [phase, setPhase] = useState<Phase>("intro");
   const [rotationDeg, setRotationDeg] = useState(0);
   const [highlight, setHighlight] = useState<TribeId | null>(null);
   const [responseId, setResponseId] = useState<string | null>(null);
@@ -127,7 +127,18 @@ export default function Home() {
     return <LoadingOverlay text="Preparing the wheel..." />;
   }
 
-  const spinLabel = phase === "spinning" ? "..." : "SPIN";
+  if (phase === "intro") {
+    return (
+      <div className="introScreen" onClick={() => setPhase("idle")}>
+        <div className="introContent">
+          <div className="introText">ARE YOU<br />READY???</div>
+          <div className="introTap">tap anywhere to begin</div>
+        </div>
+      </div>
+    );
+  }
+
+  const spinLabel = phase === "spinning" ? "..." : "TAP TO SPIN";
   const showOverlay = phase === "form" || phase === "done";
 
   return (
@@ -173,6 +184,7 @@ export default function Home() {
               highlight={highlight}
               spinning={phase === "spinning"}
               result={phase === "form" || phase === "done"}
+              idle={phase === "idle"}
               onSpin={handleSpin}
               disabled={busy || phase === "form" || phase === "done"}
               buttonLabel={spinLabel}
