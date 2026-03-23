@@ -25,6 +25,88 @@ body {
 * { box-sizing: border-box; }
 a { color: inherit; text-decoration: none; }
 
+/* ─── Intro screen ─── */
+
+@keyframes introTextPop {
+  0%   { opacity: 0; transform: scale(0.6); }
+  60%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes introTapBlink {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 1; }
+}
+
+@keyframes introGradientShift {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.introScreen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  overflow: hidden;
+}
+
+.introScreen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(239,68,68,0.18) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+  animation: dotColorCycle 4s infinite;
+}
+
+.introContent {
+  position: relative;
+  text-align: center;
+  user-select: none;
+}
+
+.introText {
+  font-family: "Nunito", sans-serif;
+  font-weight: 900;
+  font-size: clamp(52px, 15vw, 96px);
+  line-height: 1.05;
+  letter-spacing: 4px;
+  background: linear-gradient(to right, #ff3b30, #ffd60a, #34c759, #0a84ff, #ff3b30);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: introTextPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+             introGradientShift 4s linear infinite;
+}
+
+.introTap {
+  margin-top: 32px;
+  font-size: clamp(15px, 3.5vw, 20px);
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  animation: introTapBlink 1.4s ease-in-out infinite;
+}
+
+/* ─── Idle wheel slow rotation ─── */
+
+@keyframes idleSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.wheel-idle {
+  animation: idleSpin 18s linear infinite;
+}
+
+
 /* ─── Full-page wheel layout ─── */
 
 .fullPage {
