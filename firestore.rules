@@ -1,11 +1,12 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isAdmin() {
-      return request.auth != null && request.auth.token.admin == true;
+    // Any Firebase Auth user can read responses/devices (dashboard + export).
+    // No custom claims. Tighten later if you need stricter privacy.
+    function isSignedIn() {
+      return request.auth != null;
     }
 
-    // Public wheel can read/write quota state.
     match /meta/{docId} {
       allow read, write: if true;
     }
@@ -14,8 +15,6 @@ service cloud.firestore {
       allow read, write: if true;
     }
 
-    // Public wheel reservations/confirmation are allowed without auth.
-    // Admin can read all to show stats/export.
     match /responses/{responseId} {
       allow create: if
         request.resource.data.status == 'pending'
@@ -25,10 +24,10 @@ service cloud.firestore {
         && request.resource.data.tribeId is string
         && request.resource.data.colorId is string;
 
-      allow read: if isAdmin();
+      allow read: if isSignedIn();
 
       allow update: if
-        isAdmin()
+        isSignedIn()
         || (
           resource.data.status == 'pending'
           && request.resource.data.status == 'confirmed'
@@ -37,7 +36,7 @@ service cloud.firestore {
     }
 
     match /devices/{deviceId} {
-      allow read: if isAdmin();
+      allow read: if isSignedIn();
       allow create, update: if request.resource.data.deviceId == deviceId;
     }
   }

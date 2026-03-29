@@ -20,11 +20,6 @@ export default function AdminLogin() {
     try {
       const authObj = getAuth();
       const cred = await signInWithEmailAndPassword(authObj, email.trim(), password);
-      const token = await cred.user.getIdTokenResult();
-      if (token.claims.admin !== true) {
-        setError("This account is not an admin.");
-        return;
-      }
       navigate("/admin", { replace: true });
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Login failed.";
@@ -59,7 +54,7 @@ export default function AdminLogin() {
           <div className="card" style={{ padding: 18, width: "100%" }}>
             <div style={{ fontWeight: 1000, fontSize: 22 }}>Admin login</div>
             <div className="muted" style={{ marginTop: 6, fontSize: 13, lineHeight: 1.5 }}>
-              Sign in with an admin account (requires a Firebase Auth custom claim: <span className="kbd">admin=true</span>).
+              Sign in with any Firebase-authenticated account to access the dashboard.
             </div>
 
             <form onSubmit={handleLogin} style={{ marginTop: 16 }}>

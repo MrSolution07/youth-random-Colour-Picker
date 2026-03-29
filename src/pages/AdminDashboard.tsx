@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import LoadingOverlay from "../components/LoadingOverlay";
-import { useRequireAdmin } from "../lib/auth";
+import { useSignedInUser } from "../lib/auth";
 import { TRIBES, type TribeId } from "../lib/tribes";
 import { appReady, db } from "../lib/firebase";
 import {
@@ -27,7 +27,7 @@ type ResponseRow = {
 const META_DOC_REF = db ? doc(db, "meta", "currentRound") : null;
 
 export default function AdminDashboard() {
-  const { ready, isAdmin, user } = useRequireAdmin();
+  const { ready, user, isSignedIn } = useSignedInUser();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +57,7 @@ export default function AdminDashboard() {
 
   const [lastExportAt, setLastExportAt] = useState<number | null>(null);
 
-  const canView = ready && appReady && isAdmin && !!user && !!db;
+  const canView = ready && appReady && isSignedIn && !!db;
 
   async function loadStats() {
     if (!db || !META_DOC_REF) return;
@@ -197,7 +197,7 @@ export default function AdminDashboard() {
     return <LoadingOverlay text="Connecting to Firebase..." />;
   }
 
-  if (!isAdmin) {
+  if (!isSignedIn) {
     return (
       <div className="tribeWarsPage">
         <div className="phone-frame">
@@ -218,9 +218,9 @@ export default function AdminDashboard() {
 
           <div className="phoneBody">
             <div className="card" style={{ padding: 18, width: "100%" }}>
-              <div style={{ fontWeight: 1000, fontSize: 20 }}>Access denied</div>
+              <div style={{ fontWeight: 1000, fontSize: 20 }}>Sign in</div>
               <div className="muted" style={{ marginTop: 6, fontSize: 13, lineHeight: 1.5 }}>
-                You need an admin account (custom claim `admin=true`) to view this page.
+                Sign in with any account from your Firebase Auth users list to view stats and export.
               </div>
               <div style={{ marginTop: 14 }}>
                 <a className="btn btnPrimary" href="/admin/login">
