@@ -20,6 +20,7 @@ type ResponseRow = {
   tribeId: TribeId;
   colorId: string;
   roundIndex: number;
+  status: "pending" | "confirmed";
   createdAt?: unknown;
   confirmedAt?: unknown;
 };
@@ -56,6 +57,8 @@ export default function AdminDashboard() {
   });
 
   const [lastExportAt, setLastExportAt] = useState<number | null>(null);
+
+  const [allParticipants, setAllParticipants] = useState<ResponseRow[]>([]);
 
   const canView = ready && appReady && isSignedIn && !!db;
 
@@ -132,6 +135,18 @@ export default function AdminDashboard() {
 
       setConfirmedCounts(cCounts);
       setPendingCounts(pCounts);
+
+      // All participants across all rounds (confirmed + pending), sorted by round then name
+      const allSnap = await getDocs(collection(db, "responses"));
+      const allRows: ResponseRow[] = allSnap.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as Omit<ResponseRow, "id">),
+      }));
+      allRows.sort((a, b) => {
+        if (a.roundIndex !== b.roundIndex) return a.roundIndex - b.roundIndex;
+        return (a.name ?? "").localeCompare(b.name ?? "");
+      });
+      setAllParticipants(allRows);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to load admin stats.";
       setError(msg);
@@ -356,6 +371,107 @@ export default function AdminDashboard() {
                 Updating...
               </div>
             ) : null}
+
+            {/* All participants table */}
+            <div style={{ marginTop: 28 }}>
+              <div style={{ fontWeight: 900, fontSize: 16 }}>All participants</div>
+              <div className="muted" style={{ marginTop: 4, fontSize: 13 }}>
+                Every spin across all rounds — confirmed and pending. Sorted by round, then name.
+              </div>
+            </div>
+
+            {allParticipants.length === 0 && !loading ? (
+              <div className="muted" style={{ marginTop: 12, fontSize: 13 }}>
+                No participants yet.
+              </div>
+            ) : (
+              <div style={{ marginTop: 14, overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <thead>
+                    <tr style={{ textAlign: "left" }}>
+                      <th style={{ padding: "8px 8px", color: "rgba(255,255,255,0.5)", fontSize: 12 }}>#</th>
+                      <th style={{ padding: "8px 8px", color: "rgba(255,255,255,0.5)", fontSize: 12 }}>Round</th>
+                      <th style={{ padding: "8px 8px", color: "rgba(255,255,255,0.5)", fontSize: 12 }}>Name</th>
+                      <th style={{ padding: "8px 8px", color: "rgba(255,255,255,0.5)", fontSize: 12 }}>WhatsApp</th>
+                      <th style={{ padding: "8px 8px", color: "rgba(255,255,255,0.5)", fontSize: 12 }}>Tribe</th>
+                      <th style={{ padding: "8px 8px", color: "rgba(255,255,255,0.5)", fontSize: 12 }}>Color</th>
+                      <th style={{ padding: "8px 8px", color: "rgba(255,255,255,0.5)", fontSize: 12 }}>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allParticipants.map((p, i) => {
+                      const tribe = TRIBES.find((t) => t.id === p.tribeId);
+                      const isConfirmed = p.status === "confirmed";
+                      return (
+                        <tr
+                          key={p.id}
+                          style={{
+                            borderTop: "1px solid rgba(255,255,255,0.06)",
+                            opacity: isConfirmed ? 1 : 0.55,
+                          }}
+                        >
+                          <td style={{ padding: "9px 8px", color: "rgba(255,255,255,0.35)", fontSize: 12 }}>
+                            {i + 1}
+                          </td>
+                          <td style={{ padding: "9px 8px" }}>
+                            <span className="kbd">{p.roundIndex}</span>
+                          </td>
+                          <td style={{ padding: "9px 8px", fontWeight: isConfirmed ? 700 : 400 }}>
+                            {p.name ?? <span className="muted" style={{ fontSize: 12 }}>—</span>}
+                          </td>
+                          <td style={{ padding: "9px 8px", fontSize: 13, color: "rgba(255,255,255,0.75)" }}>
+                            {p.whatsapp ?? <span className="muted" style={{ fontSize: 12 }}>—</span>}
+                          </td>
+                          <td style={{ padding: "9px 8px" }}>
+                            {tribe ? (
+                              <span className="pill" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+                                <span
+                                  style={{
+                                    width: 8,
+                                    height: 8,
+                                    borderRadius: 999,
+                                    background: tribe.hex,
+                                    flexShrink: 0,
+                                  }}
+                                />
+                                {tribe.label}
+                              </span>
+                            ) : (
+                              p.tribeId
+                            )}
+                          </td>
+                          <td style={{ padding: "9px 8px", color: "rgba(255,255,255,0.75)", fontSize: 13 }}>
+                            {tribe?.colorLabel ?? p.colorId}
+                          </td>
+                          <td style={{ padding: "9px 8px" }}>
+                            <span
+                              className="pill"
+                              style={{
+                                borderColor: isConfirmed
+                                  ? "rgba(52,199,89,0.35)"
+                                  : "rgba(255,255,255,0.12)",
+                                color: isConfirmed ? "#34c759" : "rgba(255,255,255,0.45)",
+                                fontSize: 11,
+                              }}
+                            >
+                              {isConfirmed ? "confirmed" : "pending"}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                <div className="muted" style={{ marginTop: 10, fontSize: 13 }}>
+                  Total: <span className="kbd">{allParticipants.length}</span> spins &nbsp;·&nbsp;
+                  <span style={{ color: "#34c759" }}>
+                    {allParticipants.filter((p) => p.status === "confirmed").length} confirmed
+                  </span>
+                  &nbsp;·&nbsp;
+                  {allParticipants.filter((p) => p.status === "pending").length} pending
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
